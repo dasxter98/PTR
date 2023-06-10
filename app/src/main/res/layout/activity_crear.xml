@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFFFF"
+    tools:context=".crear">
+
+    <ImageView
+        android:id="@+id/bt_camara"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginBottom="25dp"
+        android:elevation="8dp"
+        android:translationZ="2dp"
+        app:layout_constraintBottom_toBottomOf="@+id/foto"
+        app:layout_constraintStart_toStartOf="@+id/foto"
+        app:srcCompat="@drawable/bt_camera" />
+
+    <ImageView
+        android:id="@+id/bt_upload"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="25dp"
+        android:elevation="8dp"
+        android:translationZ="2dp"
+        app:layout_constraintBottom_toBottomOf="@+id/foto"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/upload" />
+
+    <ImageView
+        android:id="@+id/bt_rotate"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="25dp"
+        android:elevation="8dp"
+        android:translationZ="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/go_back" />
+
+    <ImageView
+        android:id="@+id/foto"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/edt_pht"
+        android:elevation="8dp"
+
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/imagen_template" />
+
+    <ScrollView
+        android:id="@+id/scrollView3"
+        android:layout_width="wrap_content"
+        android:layout_height="429dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/foto">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="25sp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/estilo_item_h"
+                    android:clipToPadding="false"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:gravity="start"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/edt_nombre_crear"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:hint="Nombre"
+                            android:textColor="@color/darck_blue"
+                            android:textColorHint="@color/blue"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/edt_edad_crear"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:hint="Edad"
+                            android:inputType="number"
+                            android:textColor="@color/darck_blue"
+                            android:textColorHint="@color/blue"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/edt_peso_crear"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:hint="Insertar peso(kg)"
+                            android:inputType="number"
+                            android:textColor="@color/blue"
+                            android:textColorHint="@color/blue"
+                            android:textSize="10sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30sp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/img_loc_detalles"
+                            android:layout_width="30sp"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/location" />
+
+                        <TextView
+                            android:id="@+id/txt_estado_crear"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="5sp"
+                            android:gravity="center|left"
+                            android:text="Selecciona el estado"
+                            android:textColor="@color/blue"
+                            android:textIsSelectable="false"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:id="@+id/img_crear_genero"
+                            android:layout_width="30sp"
+                            app:srcCompat="@drawable/male"
+                            android:layout_height="30sp" />
+
+                        <TextView
+                            android:id="@+id/txt_genero_crear"
+                            android:layout_width="58dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center|left"
+                            android:text="genero"
+                            android:textColor="@color/darck_blue"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/img_crear_chip"
+                            android:layout_width="30sp"
+                            android:layout_height="30sp"
+                            android:src="@drawable/chip" />
+
+                        <TextView
+                            android:id="@+id/txt_crear_chip"
+                            android:layout_width="100dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="10sp"
+                            android:gravity="center|left"
+                            android:text="Chip"
+                            android:textColor="@color/darck_blue"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30sp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/img_crear_vacuna"
+                            android:layout_width="30sp"
+                            android:layout_height="30sp"
+                            android:src="@drawable/vacuna" />
+
+                        <TextView
+                            android:id="@+id/txt_crear_vacuna"
+                            android:layout_width="100dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="10sp"
+                            android:gravity="center|left"
+                            android:text="Vacuna"
+                            android:textColor="@color/darck_blue"
+                            android:textSize="10sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="30sp"
+                            android:gravity="end|bottom"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/img_crear_filtro"
+                                android:layout_width="30sp"
+                                android:layout_height="30sp"
+                                app:srcCompat="@drawable/estado_1" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="25sp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/estilo_item_h"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imageView5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/doctor" />
+
+                        <TextView
+                            android:id="@+id/textView4"
+                            android:textColor="@color/darck_blue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text="Veterinario/o: "
+                            android:textStyle="bold"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/txt_name_doctor"
+                            android:textColor="@color/darck_blue"
+                            android:layout_width="wrap_content"
+                            android:gravity="center_vertical"
+                            android:layout_height="match_parent"
+                            android:text="Yessica Ortiz"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imageView6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            app:srcCompat="@drawable/pill" />
+
+                        <TextView
+                            android:id="@+id/textView5"
+                            android:textColor="@color/darck_blue"
+                            android:gravity="center_vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="Medicamentos: "
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/txt_medicine"
+                            android:textColor="@color/darck_blue"
+                            android:gravity="center_vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="Clunia"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imageView9"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/event" />
+
+                        <TextView
+                            android:id="@+id/textView6"
+                            android:textColor="@color/darck_blue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="Próximas citas: "
+                            android:gravity="center_vertical"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/txt_fecha"
+                            android:textColor="@color/darck_blue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="10 Junio 2023"
+                            android:gravity="center_vertical"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="25sp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/estilo_item_h"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imageView10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/clipboard" />
+
+                        <TextView
+                            android:id="@+id/textView10"
+                            android:layout_width="252dp"
+                            android:layout_height="26dp"
+                            android:gravity="center_vertical"
+                            android:text="Historial Médico"
+                            android:textColor="@color/darck_blue"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:id="@+id/imageView11"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/frame" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="93dp"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/bt_guardar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/save" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

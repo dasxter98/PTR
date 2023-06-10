@@ -1,9 +1,6 @@
 package com.example.ptr;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.animation.Animator;
-import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -12,18 +9,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.Button;
 import android.widget.ImageView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 public class MainActivity extends AppCompatActivity {
-    private ImageView faro0, faro1, faro2,title,hola,title_bases,title_plantillas,title_chat,title_calendario,dog,papers,hearth,women,skip,crea,manten,gestiona,realiza,indicador1,indicador2,indicador3,indicador4,indicador5,bt_back;
+    private ImageView  bt_sig,bt_com,faro0, faro1, faro2,title,hola,title_bases,title_plantillas,title_chat,title_calendario,dog,papers,hearth,women,skip,crea,manten,gestiona,realiza,indicador1,indicador2,indicador3,indicador4,indicador5,bt_back;
     private View activity;
-    private Button bt_sig,bt_com;
-    private int currentAnimation = 0;
-    private Animator[] animations;
     int animacionActual ;
 
-    @SuppressLint("MissingInflatedId")
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
         bt_com.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MainActivity.this, login.class);
+                startActivity(intent);
             }
         });
         bt_sig = findViewById(R.id.bt_siguiente);
@@ -60,7 +56,8 @@ public class MainActivity extends AppCompatActivity {
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MainActivity.this, login.class);
+                startActivity(intent);
             }
         });
         title_bases = findViewById(R.id.title_bases);
@@ -174,16 +171,16 @@ public class MainActivity extends AppCompatActivity {
         //salida perro
 
         title_bases.setTranslationX(0f);
-        title_bases.animate().translationX(500f).setDuration(700);
+        title_bases.animate().translationX(-500f).setDuration(700);
         title_bases.animate().alpha(0f).setDuration(500);
 
         dog.setTranslationX(0f);
-        dog.animate().translationX(-500f).setDuration(700);
+        dog.animate().translationX(500f).setDuration(700);
         dog.animate().alpha(0f).setDuration(500);
 
 
         crea.setTranslationX(-0f);
-        crea.animate().translationX(500f).setDuration(700);
+        crea.animate().translationX(-500f).setDuration(700);
         crea.animate().alpha(0f).setDuration(500);
 
         indicador2.animate().alpha(0f).setDuration(700);
@@ -212,15 +209,15 @@ public class MainActivity extends AppCompatActivity {
 
         //salida hearth
         title_plantillas.setTranslationX(0f);
-        title_plantillas.animate().translationX(500f).setDuration(700);
+        title_plantillas.animate().translationX(-500f).setDuration(700);
         title_plantillas.animate().alpha(0f).setDuration(500);
 
         hearth.setTranslationX(0f);
-        hearth.animate().translationX(-500f).setDuration(700);
+        hearth.animate().translationX(500f).setDuration(700);
         hearth.animate().alpha(0f).setDuration(500);
 
         realiza.setTranslationX(0f);
-        realiza.animate().translationX(500f).setDuration(700);
+        realiza.animate().translationX(-500f).setDuration(700);
         realiza.animate().alpha(0f).setDuration(500);
 
         indicador3.animate().alpha(0f).setDuration(700);
@@ -243,7 +240,6 @@ public class MainActivity extends AppCompatActivity {
 
         indicador2.animate().alpha(1f).setDuration(700);
         bt_back.animate().alpha(1f).setDuration(700);
-        skip.animate().alpha(0f).setDuration(700);
 
         animacionActual = 2;
     }
@@ -251,15 +247,15 @@ public class MainActivity extends AppCompatActivity {
     private void animacionPlantillas() {
         //salida women
         title_chat.setTranslationX(0f);
-        title_chat.animate().translationX(500f).setDuration(700);
+        title_chat.animate().translationX(-500f).setDuration(700);
         title_chat.animate().alpha(0f).setDuration(500);
 
         women.setTranslationX(0f);
-        women.animate().translationX(-500f).setDuration(700);
+        women.animate().translationX(500f).setDuration(700);
         women.animate().alpha(0f).setDuration(500);
 
         manten.setTranslationX(0f);
-        manten.animate().translationX(500f).setDuration(700);
+        manten.animate().translationX(-500f).setDuration(700);
         manten.animate().alpha(0f).setDuration(500);
 
         indicador4.animate().alpha(0f).setDuration(700);
@@ -304,16 +300,16 @@ public class MainActivity extends AppCompatActivity {
 
         //salida papers
         title_calendario.setTranslationX(0f);
-        title_calendario.animate().translationX(500f).setDuration(700);
+        title_calendario.animate().translationX(-500f).setDuration(700);
         title_calendario.animate().alpha(0f).setDuration(500);
 
         papers.setTranslationX(0f);
-        papers.animate().translationX(-500f).setDuration(700);
+        papers.animate().translationX(500f).setDuration(700);
         papers.animate().alpha(0f).setDuration(500);
 
 
         gestiona.setTranslationX(0f);
-        gestiona.animate().translationX(500f).setDuration(700);
+        gestiona.animate().translationX(-500f).setDuration(700);
         gestiona.animate().alpha(0f).setDuration(500);
 
         indicador5.animate().alpha(0f).setDuration(700);
@@ -356,6 +352,9 @@ public class MainActivity extends AppCompatActivity {
         bt_com.animate().alpha(0f).setDuration(700);
 
         animacionActual = 4;
+
+        skip.animate().alpha(1f).setDuration(700);
+        skip.setClickable(true);
     }
 
     private void animacionCalendario() {
@@ -394,6 +393,9 @@ public class MainActivity extends AppCompatActivity {
         bt_com.animate().alpha(1f).setDuration(700);
 
         animacionActual = 5;
+
+        skip.animate().alpha(0f).setDuration(700);
+        skip.setClickable(false);
     }
 
     private void showNextAnimation(){

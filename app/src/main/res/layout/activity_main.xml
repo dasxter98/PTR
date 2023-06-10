@@ -9,10 +9,10 @@
     tools:context=".MainActivity">
 
 
-        <Button
+        <ImageView
             android:id="@+id/bt_comenzar"
-            android:layout_width="116dp"
-            android:layout_height="63dp"
+            android:layout_width="115dp"
+            android:layout_height="65dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/comienzar"
@@ -21,8 +21,7 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/hola"
-            app:layout_constraintVertical_bias="1.0"
-            tools:ignore="OnClick" />
+            app:layout_constraintVertical_bias="1.0" />
 
         <ImageView
             android:id="@+id/title"
@@ -36,10 +35,10 @@
             app:layout_constraintVertical_bias="0.655"
             app:srcCompat="@drawable/ligthhouse" />
 
-        <Button
+        <ImageView
             android:id="@+id/bt_siguiente"
-            android:layout_width="116dp"
-            android:layout_height="63dp"
+            android:layout_width="115dp"
+            android:layout_height="65dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/bt_siguiente"
@@ -48,8 +47,7 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/hola"
-            app:layout_constraintVertical_bias="1.0"
-            tools:ignore="OnClick" />
+            app:layout_constraintVertical_bias="1.0" />
 
         <ImageView
             android:id="@+id/women"
