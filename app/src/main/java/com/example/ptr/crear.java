@@ -30,6 +30,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -48,10 +49,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 public class crear extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 100;
-    private static final int REQUEST_READ_EXTERNAL_STORAGE = 2;
     private int currentFiltro = 1;
     private int currentEstado = 1;
     private boolean genero,chip,vacuna = false;
@@ -60,7 +61,6 @@ public class crear extends AppCompatActivity {
     private EditText edt_nombre_crear, edt_edad_crear,edt_peso_crear;
     private TextView txt_estado_crear,txt_genero_crear,txt_crear_chip,txt_crear_vacuna;
     private String currentPhotoPath;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,22 +94,18 @@ public class crear extends AppCompatActivity {
                 String nombreAnimal = String.valueOf(edt_nombre_crear.getText());
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 DocumentReference animalRef = db.collection("animales").document(nombreAnimal);
-
-                // Verificar si el animal ya existe
+                String ID_animal = UUID.randomUUID().toString();
+                String UID_usuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 animalRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                // El animal ya existe, ejecutar operación de actualización
-                                actualizarAnimal(nombreAnimal, vacuna, chip, genero, Integer.parseInt(String.valueOf(edt_edad_crear.getText())), Integer.parseInt(String.valueOf(edt_peso_crear.getText())), currentEstado, currentFiltro, foto);
+                                actualizarAnimal(UID_usuario, ID_animal,nombreAnimal, vacuna, chip, genero, Integer.parseInt(String.valueOf(edt_edad_crear.getText())), Integer.parseInt(String.valueOf(edt_peso_crear.getText())), currentEstado, currentFiltro, foto);
                             } else {
-                                // El animal no existe, ejecutar operación de añadir
-                                añadirAnimal(nombreAnimal, vacuna, chip, genero, Integer.parseInt(String.valueOf(edt_edad_crear.getText())), Integer.parseInt(String.valueOf(edt_peso_crear.getText())), currentEstado, currentFiltro, foto);
+                                añadirAnimal(UID_usuario, ID_animal,nombreAnimal, vacuna, chip, genero, Integer.parseInt(String.valueOf(edt_edad_crear.getText())), Integer.parseInt(String.valueOf(edt_peso_crear.getText())), currentEstado, currentFiltro, foto);
                             }
-                        } else {
-                            // Error al obtener el documento, manejar el error según sea necesario
                         }
                     }
                 });
@@ -271,14 +267,13 @@ public class crear extends AppCompatActivity {
         //=============================================================================================================================================
     }
     //=============================================================================================================================================
-    public void añadirAnimal(String nombre, boolean vacuna, boolean chip, boolean genero, int edad, int peso, int estado, int filtro, ImageView foto) {
+    public void añadirAnimal(String UID,String id,String nombre, boolean vacuna, boolean chip, boolean genero, int edad, int peso, int estado, int filtro, ImageView foto) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference animalRef = db.collection("animales").document(nombre);
-
-        // Obtener la URL de la foto desde el ImageView
         subirImagenAFirebase(foto, nombre, imageUrl -> {
-            // Aquí puedes utilizar la URL de la imagen para añadirla al animal
             Map<String, Object> animalData = new HashMap<>();
+            animalData.put("UID_usuario", UID);
+            animalData.put("ID_animal", id);
             animalData.put("nombre", nombre);
             animalData.put("vacuna", vacuna);
             animalData.put("chip", chip);
@@ -291,27 +286,24 @@ public class crear extends AppCompatActivity {
 
             animalRef.set(animalData)
                     .addOnSuccessListener(aVoid -> {
-                        // Éxito al añadir el animal a Firebase
                         Toast.makeText(crear.this, "Animal añadido correctamente", Toast.LENGTH_SHORT).show();
-
                         Intent intent = new Intent(crear.this, detalles.class);
                         intent.putExtra("nombre", nombre);
                         startActivity(intent);
                     })
                     .addOnFailureListener(e -> {
-                        // Error al añadir el animal a Firebase
                         Toast.makeText(crear.this, "Error al añadir el animal", Toast.LENGTH_SHORT).show();
                     });
         });
     }
-    public void actualizarAnimal(String nombre, boolean vacuna, boolean chip, boolean genero, int edad, int peso, int estado, int filtro, ImageView foto) {
+    public void actualizarAnimal(String UID,String id,String nombre, boolean vacuna, boolean chip, boolean genero, int edad, int peso, int estado, int filtro, ImageView foto) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference animalRef = db.collection("animales").document(nombre);
-
-        // Obtener la URL de la foto desde el ImageView
         subirImagenAFirebase(foto, nombre, imageUrl -> {
-            // Aquí puedes utilizar la URL de la imagen para actualizar el animal
+
             Map<String, Object> animalData = new HashMap<>();
+            animalData.put("UID_usuario", UID);
+            animalData.put("ID_animal", id);
             animalData.put("nombre", nombre);
             animalData.put("vacuna", vacuna);
             animalData.put("chip", chip);
@@ -324,15 +316,12 @@ public class crear extends AppCompatActivity {
 
             animalRef.set(animalData)
                     .addOnSuccessListener(aVoid -> {
-                        // Éxito al actualizar el animal en Firebase
                         Toast.makeText(crear.this, "Animal actualizado correctamente", Toast.LENGTH_SHORT).show();
-
                         Intent intent = new Intent(crear.this, detalles.class);
                         intent.putExtra("nombre", nombre);
                         startActivity(intent);
                     })
                     .addOnFailureListener(e -> {
-                        // Error al actualizar el animal en Firebase
                         Toast.makeText(crear.this, "Error al actualizar el animal", Toast.LENGTH_SHORT).show();
                     });
         });

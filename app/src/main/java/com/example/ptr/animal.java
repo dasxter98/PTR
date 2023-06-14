@@ -2,6 +2,8 @@ package com.example.ptr;
 
 public class animal {
 
+    String UID_usuario;
+    String ID_animal;
     String nombre;
     Boolean vacuna;
     Boolean chip;
@@ -15,7 +17,9 @@ public class animal {
 
 
 
-    public animal(String nombre, Boolean vacuna, Boolean chip,Boolean genero, Integer edad, Integer peso, Integer estado ,Integer filtro,String fotoUrl ) {
+    public animal(String UID_usuario,String ID_animal,String nombre, Boolean vacuna, Boolean chip,Boolean genero, Integer edad, Integer peso, Integer estado ,Integer filtro,String fotoUrl ) {
+        this.UID_usuario = UID_usuario;
+        this.ID_animal = ID_animal;
         this.nombre = nombre;
         this.vacuna = vacuna;
         this.chip = chip;
@@ -31,7 +35,21 @@ public class animal {
     public animal() {
 
     }
+    public String getUID_usuario() {
+        return UID_usuario;
+    }
 
+    public void setUID_usuario(String UID_usuario) {
+        this.UID_usuario = UID_usuario;
+    }
+
+    public String getID_animal() {
+        return ID_animal;
+    }
+
+    public void setID_animal(String ID_animal) {
+        this.ID_animal = ID_animal;
+    }
 
     public Boolean getGenero() {
         return genero;

@@ -8,10 +8,8 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class hub extends AppCompatActivity {
-
     ImageView  patita,users, calendar,coins,chat;
     ImageView sanando,perdidos,proceso,adoptados,todos,crear,adopcion;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +22,13 @@ public class hub extends AppCompatActivity {
         proceso = (ImageView) findViewById(R.id.bt_proceso);
         adoptados = (ImageView) findViewById(R.id.bt_adoptados);
         crear = (ImageView) findViewById(R.id.bt_crea);
+        patita = (ImageView) findViewById(R.id.patita);
+        users = (ImageView) findViewById(R.id.users);
+        calendar = (ImageView) findViewById(R.id.calendar);
+        coins = (ImageView) findViewById(R.id.coins);
+        chat = (ImageView) findViewById(R.id.chat);
+
+        //Menu===================================
         crear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,12 +100,7 @@ public class hub extends AppCompatActivity {
             }
         });
 
-        patita = (ImageView) findViewById(R.id.patita);
-        users = (ImageView) findViewById(R.id.users);
-        calendar = (ImageView) findViewById(R.id.calendar);
-        coins = (ImageView) findViewById(R.id.coins);
-        chat = (ImageView) findViewById(R.id.chat);
-
+        //Nav_bar===================================
         users.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

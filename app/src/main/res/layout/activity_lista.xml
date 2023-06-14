@@ -67,7 +67,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/users"
         app:layout_constraintTop_toTopOf="@+id/nav_bar"
-        app:srcCompat="@drawable/foundation_paw" />
+        app:srcCompat="@drawable/paw_colored" />
 
     <ImageView
         android:id="@+id/chat"

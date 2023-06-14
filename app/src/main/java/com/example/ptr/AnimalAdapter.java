@@ -22,8 +22,10 @@ public class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.AnimalView
     private OnItemClickListener onItemClickListener;
     private static final int VIEW_TYPE_LIST = 1;
     private static final int VIEW_TYPE_GRID = 2;
-    private static List<animal> animalList;
+    public static List<animal> animalList , filteredList;
     private boolean isGridMode = false;
+    private boolean isFiltered = false;
+
     public static StorageReference storageReference;
 
     public AnimalAdapter(List<animal> animalList, StorageReference storageReference) {
@@ -31,12 +33,33 @@ public class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.AnimalView
         this.storageReference = storageReference;
     }
 
+
     public void actualizarDatos(List<animal> nuevosDatos) {
         animalList = nuevosDatos;
         notifyDataSetChanged();
     }
 
 
+    public boolean isFiltered() {
+        return isFiltered;
+    }
+
+    public int getOriginalPosition(int filteredPosition) {
+        if (filteredPosition >= 0 && filteredPosition < filteredList.size()) {
+            animal filteredAnimal = filteredList.get(filteredPosition);
+
+            return animalList.indexOf(filteredAnimal);
+        }
+        return RecyclerView.NO_POSITION;
+    }
+
+    public animal getItem(int position) {
+        if (isFiltered) {
+            return filteredList.get(position);
+        } else {
+            return animalList.get(position);
+        }
+    }
     @Override
     public int getItemViewType(int position) {
         if (isGridMode) {

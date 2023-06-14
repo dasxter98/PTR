@@ -6,10 +6,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 public class people extends AppCompatActivity {
     ImageView  patita,users, calendar,coins,chat;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +25,6 @@ public class people extends AppCompatActivity {
                 overridePendingTransition(R.anim.fade_animation, R.anim.fade_animation);
             }
         });
-
         calendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

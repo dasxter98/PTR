@@ -45,7 +45,6 @@ public class register extends AppCompatActivity {
         go_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(register.this, login.class);
                 startActivity(intent);
             }
@@ -54,30 +53,26 @@ public class register extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (edt_nombre.getText().toString().isEmpty() || edt_email_register.getText().toString().isEmpty()|| edt_email_register.getText().toString().isEmpty()){
-                    //comprobar si hay datos introducidos
                     Toast.makeText(register.this, "Introduzca sus datos", Toast.LENGTH_SHORT).show();
                 }else{
-                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(edt_email_register.getText().toString(),edt_email_register.getText().toString())
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-
-                            if (task.isSuccessful()) {
-                                // El usuario se creó correctamente
-                                Toast.makeText(register.this, "Usuario creado correctamente", Toast.LENGTH_SHORT).show();
-                                String email = edt_email_register.getText().toString();
-                                String password = edt_passw_register.getText().toString();
-                                Intent intent = new Intent(register.this, login.class);
-                                intent.putExtra("email", email);
-                                intent.putExtra("password", password);
-                                startActivity(intent);
-                            } else {
-                                // Hubo un error al crear el usuario
-                                Toast.makeText(register.this, "Error al crear el usuario: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-
+                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(edt_email_register.getText().toString(),edt_passw_register.getText().toString())
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        // El usuario se creó correctamente
+                                        Toast.makeText(register.this, "Usuario creado correctamente", Toast.LENGTH_SHORT).show();
+                                        String email = edt_email_register.getText().toString();
+                                        String password = edt_passw_register.getText().toString();
+                                        Intent intent = new Intent(register.this, login.class);
+                                        intent.putExtra("email", email);
+                                        intent.putExtra("password", password);
+                                        startActivity(intent);
+                                    } else {
+                                        Toast.makeText(register.this, "Error al crear el usuario: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                 }
             }
         });

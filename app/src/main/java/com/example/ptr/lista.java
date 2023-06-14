@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -29,7 +30,6 @@ import java.util.List;
 
 public class lista extends AppCompatActivity implements AnimalAdapter.OnItemClickListener {
     ImageView  patita,users, calendar,coins,chat;
-
     StorageReference storageReference = FirebaseStorage.getInstance().getReference();
     ImageView back, list_mode;
     private boolean isListMode = true;
@@ -51,8 +51,6 @@ public class lista extends AppCompatActivity implements AnimalAdapter.OnItemClic
         back = findViewById(R.id.back);
         list_mode = findViewById(R.id.list_mode);
         bt_filtro = findViewById(R.id.bt_filtro);
-
-        // Configurar el RecyclerView y el adaptador
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         animalList = new ArrayList<>();
         adapter = new AnimalAdapter(animalList, storageReference);
@@ -63,6 +61,7 @@ public class lista extends AppCompatActivity implements AnimalAdapter.OnItemClic
         calendar = (ImageView) findViewById(R.id.calendar);
         coins = (ImageView) findViewById(R.id.coins);
         chat = (ImageView) findViewById(R.id.chat);
+
         users.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,10 +95,8 @@ public class lista extends AppCompatActivity implements AnimalAdapter.OnItemClic
                 overridePendingTransition(R.anim.fade_animation, R.anim.fade_animation);
             }
         });
-
         obtenerNuevosDatos();
 
-        // Configurar el evento de búsqueda
         busqueda.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -111,6 +108,7 @@ public class lista extends AppCompatActivity implements AnimalAdapter.OnItemClic
             public void afterTextChanged(Editable s) {
                 String searchTerm = s.toString().trim();
                 filtrarElementosPorBusqueda(searchTerm);
+
             }
         });
         list_mode.setOnClickListener(new View.OnClickListener() {
@@ -129,7 +127,6 @@ public class lista extends AppCompatActivity implements AnimalAdapter.OnItemClic
             }
         });
 
-        // Configurar el botón de filtro
         int[] filtros = {R.drawable.filter, R.drawable.estado_1, R.drawable.estado_2, R.drawable.estado_3, R.drawable.estado_4, R.drawable.estado_5};
         filtroAdapter adapterF = new filtroAdapter(this, filtros);
         bt_filtro.setAdapter(adapterF);
@@ -146,25 +143,19 @@ public class lista extends AppCompatActivity implements AnimalAdapter.OnItemClic
                     bt_filtro.setBackground(selectedDrawable);
                     isFirstExecution = false;
                 }
-
                 if (position != currentPosition) {
                     Integer selectedImage = adapterF.getItem(position);
                     Drawable selectedDrawable = getResources().getDrawable(selectedImage);
                     bt_filtro.setBackground(selectedDrawable);
-
                     filtrarElementosPorFiltro(position);
-
                     currentPosition = position;
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 // No hacer nada en este caso
             }
         });
-
-
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -174,42 +165,76 @@ public class lista extends AppCompatActivity implements AnimalAdapter.OnItemClic
             }
         });
     }
-
+    //FIREBASE THINGS=================================================================================================
     private void obtenerNuevosDatos() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference animalesRef = db.collection("animales");
-
-        animalesRef.get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-
-                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        // Obtener los datos del documento y crear objetos Animal
-                        animal animal = documentSnapshot.toObject(animal.class);
-                        animalList.add(animal);
-                    }
-
-                    adapter.actualizarDatos(animalList);
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Error al obtener los nuevos datos", Toast.LENGTH_SHORT).show();
-                });
-    }
-
-    @Override
-    public void onItemClick(View itemView, int position){
-        if (position >= 0 && position < animalList.size()) {
-            animal animal = animalList.get(position);
-            Intent intent = new Intent(itemView.getContext(), detalles.class);
-            intent.putExtra("nombre", animal.getNombre());
-            itemView.getContext().startActivity(intent);
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        if (userId != null) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            CollectionReference animalesRef = db.collection("animales");
+            Query query = animalesRef.whereEqualTo("UID_usuario", userId);
+            query.get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        animalList.clear();
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            animal animal = documentSnapshot.toObject(animal.class);
+                            animalList.add(animal);
+                        }
+                        adapter.notifyDataSetChanged();
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(this, "Error al obtener los nuevos datos", Toast.LENGTH_SHORT).show();
+                    });
         }
     }
+    private void filtrarElementosPorFiltro(int filtro) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-    private void filtrarElementosPorBusqueda(String searchTerm) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference animalesRef = db.collection("animales");
 
-        animalesRef.get()
+        if (filtro != 0) {
+            Query query = animalesRef.whereEqualTo("filtro", filtro).whereEqualTo("UID_usuario", userId);
+            query.get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        // Se ejecuta cuando la consulta es exitosa
+                        List<animal> resultados = new ArrayList<>();
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            // Obtener los datos del documento y crear objetos Animal
+                            animal animal = documentSnapshot.toObject(animal.class);
+                            resultados.add(animal);
+                        }
+                        // Actualizar el adaptador con los resultados de búsqueda
+                        adapter.actualizarDatos(resultados);
+                    })
+                    .addOnFailureListener(e -> {
+                        // Se ejecuta cuando ocurre un error en la consulta
+                        Toast.makeText(this, "Error al realizar la búsqueda", Toast.LENGTH_SHORT).show();
+                    });
+        } else {
+            Query query = animalesRef.whereEqualTo("UID_usuario", userId);
+            query.get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        List<animal> resultados = new ArrayList<>();
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            // Obtener los datos del documento y crear objetos Animal
+                            animal animal = documentSnapshot.toObject(animal.class);
+                            resultados.add(animal);
+                        }
+                        adapter.actualizarDatos(resultados);
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(this, "Error al realizar la búsqueda", Toast.LENGTH_SHORT).show();
+                    });
+        }
+    }
+    private void filtrarElementosPorBusqueda(String searchTerm) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference animalesRef = db.collection("animales");
+
+        animalesRef.whereEqualTo("UID_usuario", userId)
+                .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     // Se ejecuta cuando la consulta es exitosa
                     List<animal> resultados = new ArrayList<>();
@@ -229,45 +254,6 @@ public class lista extends AppCompatActivity implements AnimalAdapter.OnItemClic
                     Toast.makeText(this, "Error al realizar la búsqueda", Toast.LENGTH_SHORT).show();
                 });
     }
-
-    private void filtrarElementosPorFiltro(int filtro) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference animalesRef = db.collection("animales");
-        if (filtro != 0) {
-            Query query = animalesRef.whereEqualTo("filtro", filtro);
-            query.get()
-                    .addOnSuccessListener(queryDocumentSnapshots -> {
-                        // Se ejecuta cuando la consulta es exitosa
-                        List<animal> resultados = new ArrayList<>();
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            // Obtener los datos del documento y crear objetos Animal
-                            animal animal = documentSnapshot.toObject(animal.class);
-                            resultados.add(animal);
-                        }
-                        // Actualizar el adaptador con los resultados de búsqueda
-                        adapter.actualizarDatos(resultados);
-                    })
-                    .addOnFailureListener(e -> {
-                        // Se ejecuta cuando ocurre un error en la consulta
-                        Toast.makeText(this, "Error al realizar la búsqueda", Toast.LENGTH_SHORT).show();
-                    });
-        } else {
-            animalesRef.get()
-                    .addOnSuccessListener(queryDocumentSnapshots -> {
-                        List<animal> resultados = new ArrayList<>();
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            // Obtener los datos del documento y crear objetos Animal
-                            animal animal = documentSnapshot.toObject(animal.class);
-                            resultados.add(animal);
-                        }
-                        adapter.actualizarDatos(resultados);
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(this, "Error al realizar la búsqueda", Toast.LENGTH_SHORT).show();
-                    });
-        }
-    }
-
     private boolean esCoincidencia(String texto, String searchTerm) {
         String textoLowerCase = texto.toLowerCase();
         String searchTermLowerCase = searchTerm.toLowerCase();
@@ -279,6 +265,22 @@ public class lista extends AppCompatActivity implements AnimalAdapter.OnItemClic
         }
         return true;
     }
+    @Override
+    public void onItemClick(View itemView, int position){
+        if (position >= 0 && position < animalList.size()) {
+            animal animal = adapter.getItem(position);
+            if (adapter.isFiltered()) {
+                int originalPosition = adapter.getOriginalPosition(position);
+                animal = adapter.getItem(originalPosition);
+            }
+
+            Intent intent = new Intent(itemView.getContext(), detalles.class);
+            intent.putExtra("nombre", animal.getNombre());
+            itemView.getContext().startActivity(intent);
+        }
+    }
+
+    //========================================================================================================
 
     @Override
     public void onBackPressed() {
