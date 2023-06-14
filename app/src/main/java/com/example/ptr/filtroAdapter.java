@@ -49,9 +49,7 @@ public class filtroAdapter extends ArrayAdapter<Integer> {
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.item_filtro, parent, false);
         }
-
         ImageView imageViewFiltro = convertView.findViewById(R.id.iv_filtro);
-        // Cambiar el tamaño de la imagen ajustando el escalado
         imageViewFiltro.setImageResource(getItem(position));
         imageViewFiltro.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         imageViewFiltro.setAdjustViewBounds(true);

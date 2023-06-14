@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -31,7 +32,7 @@ import java.util.List;
 public class lista extends AppCompatActivity implements AnimalAdapter.OnItemClickListener {
     ImageView  patita,users, calendar,coins,chat;
     StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-    ImageView back, list_mode;
+    ImageView back, list_mode,img_noAnimales;
     private boolean isListMode = true;
     private RecyclerView recyclerView;
     private AnimalAdapter adapter;
@@ -45,7 +46,7 @@ public class lista extends AppCompatActivity implements AnimalAdapter.OnItemClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista);
-
+        img_noAnimales = findViewById(R.id.img_noAnimales);
         recyclerView = findViewById(R.id.recyclerView);
         busqueda = findViewById(R.id.search_bar);
         back = findViewById(R.id.back);
@@ -62,6 +63,31 @@ public class lista extends AppCompatActivity implements AnimalAdapter.OnItemClic
         coins = (ImageView) findViewById(R.id.coins);
         chat = (ImageView) findViewById(R.id.chat);
 
+        //Botones============================================================================================
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(lista.this, hub.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.fade_animation, R.anim.fade_animation);
+            }
+        });
+        list_mode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isListMode = !isListMode;
+                if (isListMode) {
+                    list_mode.setImageResource(R.drawable.list_h);
+                    isGridMode = false;
+                } else {
+                    list_mode.setImageResource(R.drawable.list_grid);
+                    isGridMode = true;
+                }
+                adapter.setGridMode(isGridMode);
+                recyclerView.setLayoutManager(isGridMode ? new GridLayoutManager(lista.this, 2) : new LinearLayoutManager(lista.this));
+            }
+        });
+        //Nav_bar============================================================================================
         users.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,8 +121,9 @@ public class lista extends AppCompatActivity implements AnimalAdapter.OnItemClic
                 overridePendingTransition(R.anim.fade_animation, R.anim.fade_animation);
             }
         });
+        //====================================================================================================
         obtenerNuevosDatos();
-
+        //Filtros===================================================================================================
         busqueda.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -108,29 +135,11 @@ public class lista extends AppCompatActivity implements AnimalAdapter.OnItemClic
             public void afterTextChanged(Editable s) {
                 String searchTerm = s.toString().trim();
                 filtrarElementosPorBusqueda(searchTerm);
-
             }
         });
-        list_mode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isListMode = !isListMode;
-                if (isListMode) {
-                    list_mode.setImageResource(R.drawable.list_h);
-                    isGridMode = false;
-                } else {
-                    list_mode.setImageResource(R.drawable.list_grid);
-                    isGridMode = true;
-                }
-                adapter.setGridMode(isGridMode);
-                recyclerView.setLayoutManager(isGridMode ? new GridLayoutManager(lista.this, 2) : new LinearLayoutManager(lista.this));
-            }
-        });
-
         int[] filtros = {R.drawable.filter, R.drawable.estado_1, R.drawable.estado_2, R.drawable.estado_3, R.drawable.estado_4, R.drawable.estado_5};
         filtroAdapter adapterF = new filtroAdapter(this, filtros);
         bt_filtro.setAdapter(adapterF);
-
         bt_filtro.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             private int currentPosition = 0;
             @Override
@@ -156,14 +165,7 @@ public class lista extends AppCompatActivity implements AnimalAdapter.OnItemClic
                 // No hacer nada en este caso
             }
         });
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(lista.this, hub.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.fade_animation, R.anim.fade_animation);
-            }
-        });
+
     }
     //FIREBASE THINGS=================================================================================================
     private void obtenerNuevosDatos() {
@@ -180,12 +182,22 @@ public class lista extends AppCompatActivity implements AnimalAdapter.OnItemClic
                             animalList.add(animal);
                         }
                         adapter.notifyDataSetChanged();
+
+                        if (animalList.size() == 0) {
+                            Log.d("MiApp", "====================================Size: " + animalList.size());
+                            img_noAnimales.setVisibility(View.VISIBLE);
+                            Toast.makeText(this, "No tienes animales aún", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.d("MiApp", "====================================Size: " + animalList.size());
+                            img_noAnimales.setVisibility(View.INVISIBLE);
+                        }
                     })
                     .addOnFailureListener(e -> {
                         Toast.makeText(this, "Error al obtener los nuevos datos", Toast.LENGTH_SHORT).show();
                     });
         }
     }
+
     private void filtrarElementosPorFiltro(int filtro) {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 

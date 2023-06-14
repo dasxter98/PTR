@@ -408,13 +408,6 @@ public class crear extends AppCompatActivity {
         return filePath;
     }
     //=============================================================================================================================================
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(this, hub.class);
-        startActivity(intent);
-        overridePendingTransition(R.anim.fade_animation, R.anim.fade_animation);
-        finish();
-    }
     private void obtenerDetallesAnimal(String nombre) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference animalesRef = db.collection("animales");
@@ -480,5 +473,12 @@ public class crear extends AppCompatActivity {
                 }
             }
         });
+    }
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, hub.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.fade_animation, R.anim.fade_animation);
+        finish();
     }
 }
