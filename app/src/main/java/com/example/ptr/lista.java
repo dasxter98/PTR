@@ -42,7 +42,7 @@ public class lista extends AppCompatActivity implements AnimalAdapter.OnItemClic
     EditText busqueda;
     boolean isFirstExecution=true;
     Spinner bt_filtro;
-    ProgressBar load ;
+    ProgressBar load_lista ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +64,8 @@ public class lista extends AppCompatActivity implements AnimalAdapter.OnItemClic
         calendar = (ImageView) findViewById(R.id.calendar);
         coins = (ImageView) findViewById(R.id.coins);
         chat = (ImageView) findViewById(R.id.chat);
-        load  = (ProgressBar) findViewById(R.id.load);
-        load.setVisibility(View.VISIBLE);
+        load_lista  = (ProgressBar) findViewById(R.id.load_lista);
+        load_lista.setVisibility(View.VISIBLE);
 
         //Botones============================================================================================
         back.setOnClickListener(new View.OnClickListener() {
@@ -186,7 +186,7 @@ public class lista extends AppCompatActivity implements AnimalAdapter.OnItemClic
                             animalList.add(animal);
                         }
                         adapter.notifyDataSetChanged();
-                        load.setVisibility(View.INVISIBLE);
+                        load_lista.setVisibility(View.INVISIBLE);
 
                         if (animalList.size() == 0) {
                             Log.d("MiApp", "====================================Size: " + animalList.size());
@@ -204,6 +204,7 @@ public class lista extends AppCompatActivity implements AnimalAdapter.OnItemClic
     }
 
     private void filtrarElementosPorFiltro(int filtro) {
+
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -222,6 +223,7 @@ public class lista extends AppCompatActivity implements AnimalAdapter.OnItemClic
                         }
                         // Actualizar el adaptador con los resultados de búsqueda
                         adapter.actualizarDatos(resultados);
+
                     })
                     .addOnFailureListener(e -> {
                         // Se ejecuta cuando ocurre un error en la consulta

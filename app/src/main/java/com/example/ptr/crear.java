@@ -15,6 +15,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,6 +62,7 @@ public class crear extends AppCompatActivity {
     private EditText edt_nombre_crear, edt_edad_crear,edt_peso_crear;
     private TextView txt_estado_crear,txt_genero_crear,txt_crear_chip,txt_crear_vacuna;
     private String currentPhotoPath;
+    ProgressBar load_crear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,14 +89,22 @@ public class crear extends AppCompatActivity {
         bt_camara = (ImageView)findViewById(R.id.bt_camara);
         foto= (ImageView) findViewById(R.id.foto);
         bt_back = (ImageView)findViewById(R.id.bt_rotate);
+        load_crear = findViewById(R.id.load_crear);
         //=============================================================================================================================================
         bt_guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String nombreAnimal = String.valueOf(edt_nombre_crear.getText());
+
+                // Verificar si los campos están vacíos
+                if (String.valueOf(edt_nombre_crear.getText()).isEmpty() || String.valueOf(edt_edad_crear.getText()).isEmpty() || String.valueOf(edt_peso_crear.getText()).isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Ingrese los datos", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                load_crear.setVisibility(View.VISIBLE);
+                bt_guardar.setClickable(false);
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
-                DocumentReference animalRef = db.collection("animales").document(nombreAnimal);
                 String ID_animal = UUID.randomUUID().toString();
+                DocumentReference animalRef = db.collection("animales").document(ID_animal);
                 String UID_usuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 animalRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -102,9 +112,9 @@ public class crear extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                actualizarAnimal(UID_usuario, ID_animal,nombreAnimal, vacuna, chip, genero, Integer.parseInt(String.valueOf(edt_edad_crear.getText())), Integer.parseInt(String.valueOf(edt_peso_crear.getText())), currentEstado, currentFiltro, foto);
+                                actualizarAnimal(UID_usuario, ID_animal, String.valueOf(edt_nombre_crear.getText()), vacuna, chip, genero, Integer.parseInt(String.valueOf(edt_edad_crear.getText())), Integer.parseInt(String.valueOf(edt_peso_crear.getText())), currentEstado, currentFiltro, foto);
                             } else {
-                                añadirAnimal(UID_usuario, ID_animal,nombreAnimal, vacuna, chip, genero, Integer.parseInt(String.valueOf(edt_edad_crear.getText())), Integer.parseInt(String.valueOf(edt_peso_crear.getText())), currentEstado, currentFiltro, foto);
+                                añadirAnimal(UID_usuario, ID_animal, String.valueOf(edt_nombre_crear.getText()), vacuna, chip, genero, Integer.parseInt(String.valueOf(edt_edad_crear.getText())), Integer.parseInt(String.valueOf(edt_peso_crear.getText())), currentEstado, currentFiltro, foto);
                             }
                         }
                     }
@@ -293,6 +303,8 @@ public class crear extends AppCompatActivity {
                     })
                     .addOnFailureListener(e -> {
                         Toast.makeText(crear.this, "Error al añadir el animal", Toast.LENGTH_SHORT).show();
+                        load_crear.setVisibility(View.INVISIBLE);
+                        bt_guardar.setClickable(true);
                     });
         });
     }
@@ -323,6 +335,8 @@ public class crear extends AppCompatActivity {
                     })
                     .addOnFailureListener(e -> {
                         Toast.makeText(crear.this, "Error al actualizar el animal", Toast.LENGTH_SHORT).show();
+                        load_crear.setVisibility(View.INVISIBLE);
+                        bt_guardar.setClickable(true);
                     });
         });
     }

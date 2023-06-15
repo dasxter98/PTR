@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,7 +16,7 @@ public class login extends AppCompatActivity {
 
     ImageView bt_register , bt_iniciar;
     EditText edt_email, edt_passw;
-
+    ProgressBar load_login;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +29,9 @@ public class login extends AppCompatActivity {
         String password = getIntent().getStringExtra("password");
         edt_email.setText(email);
         edt_passw.setText(password);
+        load_login  = findViewById(R.id.load_login);
+        load_login.setVisibility(View.INVISIBLE);
+
         bt_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,6 +45,7 @@ public class login extends AppCompatActivity {
                 if (edt_email.getText().toString().isEmpty() || edt_passw.getText().toString().isEmpty()) {
                     Toast.makeText(login.this, "Introduzca sus datos", Toast.LENGTH_SHORT).show();
                 } else {
+                    load_login.setVisibility(View.VISIBLE);
                     FirebaseAuth.getInstance().signInWithEmailAndPassword(edt_email.getText().toString(), edt_passw.getText().toString())
                             .addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
@@ -49,6 +54,7 @@ public class login extends AppCompatActivity {
                                     startActivity(intent);
                                 } else {
                                     Toast.makeText(login.this, "Inicio de sesión fallido", Toast.LENGTH_SHORT).show();
+                                    load_login.setVisibility(View.INVISIBLE);
                                 }
                             });
                 }

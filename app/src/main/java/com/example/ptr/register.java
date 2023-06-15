@@ -1,10 +1,12 @@
 package com.example.ptr;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,8 +24,9 @@ public class register extends AppCompatActivity {
     EditText edt_nombre, edt_passw_register,edt_email_register;
     TextView txt_iniciar;
 
+    ProgressBar load_register;
 
-
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +38,8 @@ public class register extends AppCompatActivity {
         edt_nombre = findViewById(R.id.edt_nombre);
         edt_passw_register = findViewById(R.id.edt_passw_register);
         edt_email_register = findViewById(R.id.edt_email_register);
+        load_register = findViewById(R.id.load_register);
+        load_register.setVisibility(View.INVISIBLE);
         txt_iniciar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,6 +60,8 @@ public class register extends AppCompatActivity {
                 if (edt_nombre.getText().toString().isEmpty() || edt_email_register.getText().toString().isEmpty()|| edt_email_register.getText().toString().isEmpty()){
                     Toast.makeText(register.this, "Introduzca sus datos", Toast.LENGTH_SHORT).show();
                 }else{
+
+                    load_register.setVisibility(View.VISIBLE);
                     FirebaseAuth.getInstance().createUserWithEmailAndPassword(edt_email_register.getText().toString(),edt_passw_register.getText().toString())
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
@@ -70,6 +77,7 @@ public class register extends AppCompatActivity {
                                         startActivity(intent);
                                     } else {
                                         Toast.makeText(register.this, "Error al crear el usuario: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                        load_register.setVisibility(View.INVISIBLE);
                                     }
                                 }
                             });
