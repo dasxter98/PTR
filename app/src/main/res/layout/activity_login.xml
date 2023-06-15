@@ -110,20 +110,23 @@
         android:layout_width="150dp"
         android:layout_height="26dp"
         android:layout_marginTop="5dp"
+        android:fontFamily="sans-serif"
         android:gravity="center"
         android:text="¿No tienes cuenta aún?"
         android:textColor="#1D1C2A"
         android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/explain_txt2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bt_iniciar" />
+        app:layout_constraintTop_toBottomOf="@+id/bt_iniciar"
+        app:layout_constraintVertical_bias="0.057" />
 
     <ImageView
         android:id="@+id/bt_iniciar"
         android:layout_width="130sp"
         android:layout_height="50sp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
         android:clickable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -135,12 +138,15 @@
         android:id="@+id/bt_register"
         android:layout_width="130sp"
         android:layout_height="50sp"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="15dp"
         android:clickable="true"
         app:layout_constraintBottom_toTopOf="@+id/explain_txt2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/explain_txt"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/bt_registrarse" />
 
     <TextView

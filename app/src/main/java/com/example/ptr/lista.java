@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -41,6 +42,7 @@ public class lista extends AppCompatActivity implements AnimalAdapter.OnItemClic
     EditText busqueda;
     boolean isFirstExecution=true;
     Spinner bt_filtro;
+    ProgressBar load ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,8 @@ public class lista extends AppCompatActivity implements AnimalAdapter.OnItemClic
         calendar = (ImageView) findViewById(R.id.calendar);
         coins = (ImageView) findViewById(R.id.coins);
         chat = (ImageView) findViewById(R.id.chat);
+        load  = (ProgressBar) findViewById(R.id.load);
+        load.setVisibility(View.VISIBLE);
 
         //Botones============================================================================================
         back.setOnClickListener(new View.OnClickListener() {
@@ -182,6 +186,7 @@ public class lista extends AppCompatActivity implements AnimalAdapter.OnItemClic
                             animalList.add(animal);
                         }
                         adapter.notifyDataSetChanged();
+                        load.setVisibility(View.INVISIBLE);
 
                         if (animalList.size() == 0) {
                             Log.d("MiApp", "====================================Size: " + animalList.size());
